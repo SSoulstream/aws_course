@@ -1,8 +1,10 @@
 from aws_cdk import (
     # Duration,
+    CfnOutput,
     Stack,
     # aws_sqs as sqs,
-    aws_s3 as _s3
+    aws_s3 as _s3,
+    aws_iam as _iam
 )
 from constructs import Construct
 
@@ -24,5 +26,24 @@ class CourseRepoStack(Stack):
             "mybucketid",
             bucket_name="coursebucket1414",
             versioned=True,
-            encryption=_s3.BucketEncryption.KMS_MANAGED
+            encryption=_s3.BucketEncryption.S3_MANAGED,
+            block_public_access=_s3.BlockPublicAccess.BLOCK_ALL
+        )
+
+        mybucket = _s3.Bucket(
+            self,
+            "mybucketid1"
+        )
+
+        _iam.Group(
+            self,
+            "gid"
+        )
+
+        output_1 = CfnOutput(
+            self,
+            "myBucketOutput1",
+            value=mybucket.bucket_name,
+            description="first cdk bucket",
+            export_name="myBucketOutput1"
         )
